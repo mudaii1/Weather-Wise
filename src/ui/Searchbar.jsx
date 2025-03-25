@@ -1,0 +1,103 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { IoSearch } from "react-icons/io5";
+import { Link, useNavigate } from "react-router";
+import { useSuggestions } from "../hooks/useSuggestions";
+import useDebounce from "../hooks/useDebounce";
+
+function Searchbar() {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchMenu, setSearchMenu] = useState(false);
+  const inputRef = useRef();
+  const navigate = useNavigate();
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  const { data } = useSuggestions(debouncedSearchQuery);
+  const filteredLocations = useMemo(() => Array.from(new Set(data)), [data]);
+
+  useEffect(() => {
+    if (searchMenu) inputRef.current.focus();
+  }, [searchMenu]);
+
+  useEffect(() => {
+    if (filteredLocations?.length >= 1) {
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+    function handleClickOutside(e) {
+      if (inputRef.current && !inputRef.current.contains(e.target))
+        setShowSuggestions(false);
+      else setShowSuggestions(true);
+    }
+    function handleClickEnter(e) {
+      if (e.key === "Enter" && searchQuery !== "") {
+        navigate(`/city/${searchQuery}`);
+        setShowSuggestions(false);
+        setSearchQuery("");
+        setSearchMenu(false);
+        inputRef.current.blur();
+      }
+    }
+    if (inputRef.current) {
+      document.addEventListener("click", handleClickOutside);
+      inputRef.current.addEventListener("keydown", handleClickEnter);
+    }
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      if (inputRef.current)
+        inputRef.current.removeEventListener("keydown", handleClickEnter);
+    };
+  }, [filteredLocations?.length]);
+
+  const toggleSearch = () => {
+    setSearchMenu((searchMenu) => !searchMenu);
+    setShowSuggestions(false);
+    setSearchQuery("");
+  };
+
+  return (
+    <div
+      className={`relative ml-auto flex translate-x-12 items-center gap-x-2 ${showSuggestions ? "rounded-t-md" : "rounded-lg"} bg-gray-600/40 p-2`}
+    >
+      {searchMenu && (
+        <input
+          ref={inputRef}
+          type="text"
+          className="text-center text-white transition-all duration-200 outline-none"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      )}
+      {showSuggestions && (
+        <ul className="absolute inset-x-0 top-0 z-10 flex w-full translate-y-11 flex-col divide-y-2 rounded-b-md bg-gray-600/40">
+          {filteredLocations?.map(
+            (location) =>
+              location !== searchQuery && (
+                <Link to={`/city/${location}`} key={location}>
+                  <li
+                    key={location}
+                    className="z-10 cursor-pointer p-2 hover:bg-gray-700 hover:text-white"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setShowSuggestions(false);
+                      setSearchMenu(false);
+                    }}
+                  >
+                    {location}
+                  </li>
+                </Link>
+              ),
+          )}
+        </ul>
+      )}
+      <IoSearch
+        className="cursor-pointer text-3xl text-white"
+        onClick={toggleSearch}
+      />
+    </div>
+  );
+}
+
+export default Searchbar;

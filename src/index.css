@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --font-main: "Orbitron", "sans-serif";
+
+  --color-black-50: #e7e7e7;
+  --color-black-100: #b5b5b5;
+  --color-black-200: #919191;
+  --color-black-300: #5e5e5e;
+  --color-black-400: #3f3f3f;
+  --color-black-500: #0f0f0f;
+  --color-black-600: #0e0e0e;
+  --color-black-700: #0b0b0b;
+  --color-black-800: #080808;
+  --color-black-900: #060606;
+}
+.glow:hover {
+  text-shadow:
+    0 0 5px var(--color-gray-500),
+    0 0 10px var(--color-gray-800),
+    0 0 15px var(--color-gray-800);
+}
+
+.react-clock .react-clock__face {
+  border: 0 white;
+}
