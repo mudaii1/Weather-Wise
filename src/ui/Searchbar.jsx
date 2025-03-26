@@ -73,7 +73,7 @@ function Searchbar() {
         <input
           ref={inputRef}
           type="text"
-          className="max-w-20 text-center text-white transition-all duration-200 outline-none md:max-w-30 lg:max-w-40"
+          className="max-w-30 text-center text-white transition-all duration-200 outline-none md:max-w-40 lg:max-w-50"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

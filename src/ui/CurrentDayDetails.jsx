@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BiSend } from "react-icons/bi";
 import { BsCloudRain } from "react-icons/bs";
 import { IoWaterOutline } from "react-icons/io5";
@@ -7,48 +6,21 @@ import { useGetWeather } from "../hooks/useGetWeather";
 import Loader from "./Loader";
 import Error from "./Error";
 import { format } from "date-fns";
-import { getWeatherIcon } from "../services/constants";
 
-function CurrentDayDetails() {
-  const [temperature, setTemperature] = useState("C");
+function CurrentDayDetails({ temperature }) {
   const {
     data: { location, current, forecast: { forecastday } = {} } = {},
     isLoading,
     error,
   } = useGetWeather();
-  const { country, localtime, name: city } = location || {};
-  const {
-    condition: { icon, text, code } = {},
-    wind_kph,
-    humidity,
-    temp_c,
-    temp_f,
-    is_day,
-  } = current || {};
+  const { localtime } = location || {};
+  const { wind_kph, humidity, temp_c, temp_f } = current || {};
 
   if (isLoading) return <Loader />;
   if (error) return <Error message={error.message} />;
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <img
-          src={getWeatherIcon(code, is_day)}
-          alt={text || "weather icon"}
-          className="w-26 md:w-32"
-        />
-        <div
-          className="relative flex h-8 w-18 cursor-pointer items-center rounded-full border bg-gray-600/40 text-center md:h-10 md:w-23"
-          onClick={() => setTemperature((temp) => (temp === "C" ? "F" : "C"))}
-        >
-          <span className="z-10 grow md:text-xl">C</span>
-          <span className="z-10 grow md:text-xl">F</span>
-          <span
-            className={`absolute h-full w-1/2 rounded-full bg-gray-600/80 opacity-50 transition-all duration-200 ${temperature === "C" ? "translate-x-0" : "translate-x-full"}`}
-          ></span>
-        </div>
-      </div>
-
       <div className="relative w-fit">
         <h2 className="text-5xl md:text-8xl">
           {temperature === "C" ? temp_c : temp_f}
