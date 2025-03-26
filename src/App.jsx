@@ -6,6 +6,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AppLayout from "./ui/AppLayout";
 import Error from "./ui/Error";
 import { ErrorBoundary } from "react-error-boundary";
+import { Analytics } from "@vercel/analytics/react";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -42,6 +44,7 @@ function App() {
         </ErrorBoundary>
       </Router>
       <ReactQueryDevtools />
+      <Analytics />
     </QueryClientProvider>
   );
 }
