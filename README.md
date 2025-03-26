@@ -28,7 +28,7 @@ A modern weather application built with React that provides real-time weather in
 
 ## Live Demo 🚀
 
-[Visit Weather Wise](your-deployed-url-here)
+[Visit Weather Wise](https://weather-wise-mudais-projects.vercel.app/)
 
 ## Installation and Setup 🛠️
 
