@@ -59,7 +59,8 @@ function City() {
         autoPlay
         muted
         loop
-        className="absolute inset-0 -z-10 h-full w-full overflow-hidden object-cover brightness-80"
+        playsInline
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover brightness-80"
       >
         <source src="/assets/videos/sunny.mp4" type="video/mp4" />
       </video>

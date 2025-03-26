@@ -52,7 +52,8 @@ function Home() {
         autoPlay
         loop
         muted
-        className="absolute inset-0 -z-10 h-full w-full object-cover blur-[1px] brightness-60"
+        playsInline
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover blur-[1px] brightness-60"
       >
         <source src="assets/videos/home.mp4" type="video/mp4" />
       </video>
