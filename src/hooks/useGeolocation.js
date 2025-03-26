@@ -1,5 +1,5 @@
 // src/hooks/useGeolocation.js
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 export function useGeolocation() {
   const [location, setLocation] = useState({
@@ -8,7 +8,7 @@ export function useGeolocation() {
     error: null,
   });
 
-  useEffect(() => {
+  const getLocation = useCallback(() => {
     if (!("geolocation" in navigator)) {
       setLocation({
         loaded: true,
@@ -16,6 +16,8 @@ export function useGeolocation() {
       });
       return;
     }
+
+    setLocation((prev) => ({ ...prev, loaded: false }));
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -33,8 +35,13 @@ export function useGeolocation() {
           error: error.message,
         });
       },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      },
     );
   }, []);
 
-  return location;
+  return { ...location, getLocation };
 }

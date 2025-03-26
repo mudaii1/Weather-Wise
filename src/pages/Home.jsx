@@ -9,9 +9,15 @@ import { getCityByCoordinates } from "../services/weatherApi";
 
 function Home() {
   const [query, setQuery] = useState("");
-  const { coordinates, loaded, error: geolocationError } = useGeolocation();
+  const {
+    coordinates,
+    loaded,
+    error: geolocationError,
+    getLocation,
+  } = useGeolocation();
   const navigate = useNavigate();
   const [suggestMenu, setSuggestMenu] = useState(false);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const debouncedQuery = useDebounce(query, 500);
   const { data, error } = useSuggestions(query);
   const filteredLocations = useMemo(() => Array.from(new Set(data)), [data]);
@@ -45,6 +51,26 @@ function Home() {
     },
     [filteredLocations?.length],
   );
+
+  const handleGetLocation = async () => {
+    try {
+      setIsLoadingLocation(true);
+      await getLocation();
+      if (coordinates.lat && coordinates.lng) {
+        const region = await getCityByCoordinates(
+          `${coordinates.lat},${coordinates.lng}`,
+        );
+        navigate(`/city/${region}`);
+      }
+    } catch (error) {
+      console.error("Error getting location:", error);
+      alert(
+        "Unable to get your location. Please try again or search for a city.",
+      );
+    } finally {
+      setIsLoadingLocation(false);
+    }
+  };
 
   return (
     <div className="relative flex min-h-screen w-full items-center justify-center">
@@ -109,15 +135,13 @@ function Home() {
           </div>
 
           <button
-            className="w-full cursor-pointer rounded-md border-3 border-gray-500 bg-gray-500/20 px-4 py-2 text-center text-base text-white/50 hover:bg-gray-500/30 sm:px-6 sm:py-3 sm:text-lg md:text-xl"
-            onClick={async () => {
-              const region = await getCityByCoordinates(
-                `${coordinates.lat},${coordinates.lng}`,
-              );
-              navigate(`/city/${region}`);
-            }}
+            className="w-full cursor-pointer rounded-md border-3 border-gray-500 bg-gray-500/20 px-4 py-2 text-center text-base text-white/50 hover:bg-gray-500/30 disabled:cursor-not-allowed disabled:opacity-50 sm:px-6 sm:py-3 sm:text-lg md:text-xl"
+            onClick={handleGetLocation}
+            disabled={isLoadingLocation}
           >
-            Get Your Location Weather
+            {isLoadingLocation
+              ? "Getting Location..."
+              : "Get Your Location Weather"}
           </button>
         </div>
       </div>
