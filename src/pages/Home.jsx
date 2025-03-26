@@ -6,18 +6,15 @@ import { Link, useNavigate } from "react-router";
 import useDebounce from "../hooks/useDebounce";
 import { useGeolocation } from "../hooks/useGeolocation";
 import { getCityByCoordinates } from "../services/weatherApi";
+
 function Home() {
   const [query, setQuery] = useState("");
   const { coordinates, loaded, error: geolocationError } = useGeolocation();
-
   const navigate = useNavigate();
-
   const [suggestMenu, setSuggestMenu] = useState(false);
   const debouncedQuery = useDebounce(query, 500);
-
   const { data, error } = useSuggestions(query);
   const filteredLocations = useMemo(() => Array.from(new Set(data)), [data]);
-
   const ref = useRef(null);
   const inputRef = useRef(null);
 
@@ -50,47 +47,49 @@ function Home() {
   );
 
   return (
-    <>
+    <div className="relative flex min-h-screen w-full items-center justify-center">
       <video
         autoPlay
         loop
         muted
-        className="absolute inset-0 -z-10 h-dvh w-full overflow-hidden object-cover blur-[1px] brightness-60"
+        className="absolute inset-0 -z-10 h-full w-full object-cover blur-[1px] brightness-60"
       >
         <source src="assets/videos/home.mp4" type="video/mp4" />
       </video>
-      <div className="container mx-auto px-4">
-        <h1 className="glow pt-10 text-center text-3xl font-bold text-gray-500 select-none md:pt-30 md:text-9xl">
+
+      <div className="container mx-auto flex flex-col items-center justify-center px-4 py-8">
+        <h1 className="glow text-center text-4xl font-bold text-gray-500 select-none sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl">
           Weather Wise
         </h1>
-        <h2 className="glow mx-auto mt-20 text-center text-8xl tracking-widest text-gray-500 capitalize select-none md:max-w-3/4">
+
+        <h2 className="glow mt-4 text-center text-2xl tracking-widest text-gray-500 capitalize select-none sm:mt-6 sm:text-3xl md:mt-8 md:text-4xl lg:mt-10 lg:text-5xl xl:mt-12 xl:text-7xl">
           Precise
           <TiWeatherSunny className="glow inline" />
           Weather for you
         </h2>
 
-        <div className="mt-10 flex items-center justify-center gap-4">
+        <div className="mt-8 flex w-full max-w-2xl flex-col items-center justify-center gap-4 sm:mt-10 md:mt-12 lg:mt-16">
           <div
-            className="group relative flex items-center space-x-4 rounded-md border-3 border-gray-500 px-4 py-2"
+            className="group relative flex w-full items-center justify-center space-x-4 rounded-md border-3 border-gray-500 px-4 py-2"
             ref={ref}
           >
             <input
               ref={inputRef}
               type="text"
-              className="grow bg-transparent text-center text-gray-500 caret-gray-500 outline-none placeholder:text-gray-500 md:text-2xl"
+              className="w-full bg-transparent text-center text-lg text-gray-500 caret-gray-500 outline-none placeholder:text-gray-500 sm:text-xl md:text-2xl"
               placeholder="Search for a city"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
             {suggestMenu && (
-              <ul className="absolute inset-x-0 top-0 flex w-full translate-y-13 flex-col divide-y-2 rounded-sm bg-gray-500">
+              <ul className="absolute inset-x-0 top-full mt-2 flex w-full flex-col divide-y-2 rounded-sm bg-gray-500">
                 {filteredLocations?.map(
                   (location) =>
                     location !== query && (
                       <Link to={`/city/${location}`} key={location}>
                         <li
                           key={location}
-                          className="cursor-pointer px-4 py-2 hover:bg-gray-700 hover:text-white"
+                          className="cursor-pointer px-4 py-2 text-center text-base hover:bg-gray-700 hover:text-white sm:text-lg"
                           onClick={() => {
                             setQuery(location);
                             setSuggestMenu(false);
@@ -104,11 +103,12 @@ function Home() {
               </ul>
             )}
             <Link to={`${query ? `/city/${query}` : "/"}`}>
-              <IoSearchSharp className="cursor-pointer text-2xl text-gray-500" />
+              <IoSearchSharp className="cursor-pointer text-xl text-gray-500 sm:text-2xl" />
             </Link>
           </div>
+
           <button
-            className="h-[52px] cursor-pointer rounded-md border-3 border-gray-500 bg-gray-500/20 px-4 py-2 text-white/50 hover:bg-gray-500/30"
+            className="w-full cursor-pointer rounded-md border-3 border-gray-500 bg-gray-500/20 px-4 py-2 text-center text-base text-white/50 hover:bg-gray-500/30 sm:px-6 sm:py-3 sm:text-lg md:text-xl"
             onClick={async () => {
               const region = await getCityByCoordinates(
                 `${coordinates.lat},${coordinates.lng}`,
@@ -119,9 +119,8 @@ function Home() {
             Get Your Location Weather
           </button>
         </div>
-        <div className="mt-10 p-30"></div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import { calculateSunTimes, createDate } from "../services/helpers";
 
 function SunTimesDisplay({ currentDay }) {
   return (
-    <div className="flex items-center gap-x-10 border-b-2 pt-26 pb-20">
+    <div className="flex flex-col items-center justify-center gap-10 border-b-2 pt-20 pb-20 sm:flex-row sm:pt-26 md:flex-col lg:flex-row">
       <div>
         <h3 className="mb-5 text-center text-xl">Sunrise</h3>
         <div className="flex flex-col items-center space-y-2 rounded-4xl bg-gray-500/40 px-4 py-7 text-white">
@@ -19,13 +19,15 @@ function SunTimesDisplay({ currentDay }) {
             renderMinuteMarks={false}
             size={80}
           />
-          <span className="text-xl">{currentDay.astro.sunrise}</span>
+          <span className="text-xl text-nowrap">
+            {currentDay.astro.sunrise}
+          </span>
           <span className="text-lg">
             {calculateSunTimes(currentDay.astro.sunrise)}
           </span>
         </div>
       </div>
-      <div className="-translate-y-10">
+      <div className="sm:-translate-y-10 md:translate-y-0 lg:-translate-y-10">
         <h3 className="mb-5 text-center text-xl">Golden Hour</h3>
         <div className="flex flex-col items-center space-y-2 rounded-4xl bg-gray-500/40 px-4 py-7 text-white">
           <Clock
@@ -39,7 +41,9 @@ function SunTimesDisplay({ currentDay }) {
             renderMinuteMarks={false}
             size={80}
           />
-          <span className="text-xl">{currentDay.astro.sunrise}</span>
+          <span className="text-xl text-nowrap">
+            {currentDay.astro.sunrise}
+          </span>
           <span className="text-lg">{currentDay.astro.sunset}</span>
         </div>
       </div>
@@ -57,7 +61,7 @@ function SunTimesDisplay({ currentDay }) {
             renderMinuteMarks={false}
             size={80}
           />
-          <span className="text-xl">{currentDay.astro.sunset}</span>
+          <span className="text-xl text-nowrap">{currentDay.astro.sunset}</span>
           <span className="text-lg">
             {calculateSunTimes(currentDay.astro.sunset)}
           </span>

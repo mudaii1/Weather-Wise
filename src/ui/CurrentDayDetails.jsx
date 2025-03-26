@@ -35,14 +35,14 @@ function CurrentDayDetails() {
         <img
           src={getWeatherIcon(code, is_day)}
           alt={text || "weather icon"}
-          className="w-32"
+          className="w-26 md:w-32"
         />
         <div
-          className="relative mr-20 flex h-10 w-23 cursor-pointer items-center rounded-full border bg-gray-600/40 text-center"
+          className="relative flex h-8 w-18 cursor-pointer items-center rounded-full border bg-gray-600/40 text-center md:h-10 md:w-23"
           onClick={() => setTemperature((temp) => (temp === "C" ? "F" : "C"))}
         >
-          <span className="z-10 grow text-xl">C</span>
-          <span className="z-10 grow text-xl">F</span>
+          <span className="z-10 grow md:text-xl">C</span>
+          <span className="z-10 grow md:text-xl">F</span>
           <span
             className={`absolute h-full w-1/2 rounded-full bg-gray-600/80 opacity-50 transition-all duration-200 ${temperature === "C" ? "translate-x-0" : "translate-x-full"}`}
           ></span>
@@ -50,11 +50,13 @@ function CurrentDayDetails() {
       </div>
 
       <div className="relative w-fit">
-        <h2 className="text-8xl">{temperature === "C" ? temp_c : temp_f}</h2>
+        <h2 className="text-5xl md:text-8xl">
+          {temperature === "C" ? temp_c : temp_f}
+        </h2>
         {temperature === "C" ? (
-          <TbTemperatureCelsius className="absolute top-0 -right-10 text-4xl" />
+          <TbTemperatureCelsius className="absolute -top-3 -right-10 text-4xl md:top-0" />
         ) : (
-          <TbTemperatureFahrenheit className="absolute top-0 -right-10 text-4xl" />
+          <TbTemperatureFahrenheit className="absolute -top-3 -right-10 text-4xl md:top-0" />
         )}
       </div>
 
@@ -68,18 +70,18 @@ function CurrentDayDetails() {
               </span>
             ))}
         </div>
-        <div className="space-x-6">
-          <span className="text-2xl">
+        <div className="space-x-3 md:space-x-6">
+          <span className="text-xl md:text-2xl">
             {format(new Date(localtime), "EEEE")}
           </span>
-          <span className="text-2xl">|</span>
-          <span className="text-2xl">
+          <span className="text-xl md:text-2xl">|</span>
+          <span className="text-xl text-nowrap md:text-2xl">
             {format(new Date(localtime), "hh:mm a")}
           </span>
         </div>
       </div>
 
-      <div className="mt-10 flex space-x-8 text-xl">
+      <div className="mt-10 flex flex-wrap space-x-8 text-xl md:text-2xl">
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-3">
             <BiSend />
@@ -87,7 +89,6 @@ function CurrentDayDetails() {
           </div>
           <span className="ml-auto">{wind_kph} km/h</span>
         </div>
-        <div>|</div>
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-3">
             <IoWaterOutline />
@@ -95,7 +96,6 @@ function CurrentDayDetails() {
           </div>
           <span className="ml-auto">{humidity} %</span>
         </div>
-        <div>|</div>
         <div className="flex items-center space-x-6">
           <div className="flex items-center space-x-3">
             <BsCloudRain />

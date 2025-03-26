@@ -4,7 +4,7 @@ import { getWeatherIcon } from "../services/constants";
 
 function ForecastCard({ dayData }) {
   return (
-    <li className="flex flex-col items-center space-y-4 rounded-md bg-gray-500/30 px-6 py-4 text-xl">
+    <li className="flex w-40 flex-col items-center space-y-4 rounded-md bg-gray-500/30 px-6 py-4 text-xl">
       <div className="flex items-center">
         {dayData.day.avgtemp_c} <TbTemperatureCelsius className="text-2xl" />
       </div>

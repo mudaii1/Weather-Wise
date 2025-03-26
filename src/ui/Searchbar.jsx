@@ -67,13 +67,13 @@ function Searchbar() {
 
   return (
     <div
-      className={`relative ml-auto flex translate-x-12 items-center gap-x-2 ${showSuggestions ? "rounded-t-md" : "rounded-lg"} bg-gray-600/40 p-2`}
+      className={`relative ml-auto flex items-center gap-x-2 ${showSuggestions ? "rounded-t-md" : "rounded-lg"} bg-gray-600/40 p-2`}
     >
       {searchMenu && (
         <input
           ref={inputRef}
           type="text"
-          className="text-center text-white transition-all duration-200 outline-none"
+          className="max-w-20 text-center text-white transition-all duration-200 outline-none md:max-w-30 lg:max-w-40"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -101,7 +101,7 @@ function Searchbar() {
         </ul>
       )}
       <IoSearch
-        className="cursor-pointer text-3xl text-white"
+        className="cursor-pointer text-xl text-white sm:text-3xl"
         onClick={toggleSearch}
       />
     </div>
