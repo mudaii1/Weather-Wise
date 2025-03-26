@@ -21,16 +21,25 @@ function Searchbar() {
   }, [searchMenu]);
 
   useEffect(() => {
+    if (!searchMenu) {
+      setShowSuggestions(false);
+      return;
+    }
+
     if (filteredLocations?.length >= 1) {
       setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
     }
+
     function handleClickOutside(e) {
-      if (inputRef.current && !inputRef.current.contains(e.target))
+      if (inputRef.current && !inputRef.current.contains(e.target)) {
         setShowSuggestions(false);
-      else setShowSuggestions(true);
+      } else {
+        setShowSuggestions(true);
+      }
     }
+
     function handleClickEnter(e) {
       if (e.key === "Enter" && searchQuery !== "") {
         navigate(`/city/${searchQuery}`);
@@ -40,19 +49,18 @@ function Searchbar() {
         inputRef.current.blur();
       }
     }
-    if (inputRef.current) {
-      document.addEventListener("click", handleClickOutside);
-      inputRef.current.addEventListener("keydown", handleClickEnter);
-    }
+
+    document.addEventListener("click", handleClickOutside);
+    inputRef.current?.addEventListener("keydown", handleClickEnter);
+
     return () => {
       document.removeEventListener("click", handleClickOutside);
-      if (inputRef.current)
-        inputRef.current.removeEventListener("keydown", handleClickEnter);
+      inputRef.current?.removeEventListener("keydown", handleClickEnter);
     };
-  }, [filteredLocations?.length]);
+  }, [filteredLocations?.length, searchMenu, searchQuery, navigate]);
 
   const toggleSearch = () => {
-    setSearchMenu((searchMenu) => !searchMenu);
+    setSearchMenu((prev) => !prev);
     setShowSuggestions(false);
     setSearchQuery("");
   };
@@ -70,7 +78,7 @@ function Searchbar() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       )}
-      {showSuggestions && (
+      {showSuggestions && searchMenu && (
         <ul className="absolute inset-x-0 top-0 z-10 flex w-full translate-y-11 flex-col divide-y-2 rounded-b-md bg-gray-600/40">
           {filteredLocations?.map(
             (location) =>
