@@ -2,7 +2,7 @@
 
 A modern weather application built with React that provides real-time weather information with a beautiful and interactive UI.
 
-![Weather Wise App](public/assets/home7.jpg)
+![Weather Wise App](public/assets/home.jpg)
 
 ## Features 🌟
 
