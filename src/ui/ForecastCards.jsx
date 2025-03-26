@@ -15,7 +15,7 @@ function ForecastCards() {
   if (error) return <Error message={error.message} />;
 
   return (
-    <ul className="mt-20 flex flex-col items-center gap-6 sm:flex-row sm:flex-wrap">
+    <ul className="mt-20 flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap">
       {restForecast.map((dayData, day) => (
         <ForecastCard key={day} dayData={dayData} />
       ))}
