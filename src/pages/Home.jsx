@@ -55,18 +55,41 @@ function Home() {
   const handleGetLocation = async () => {
     try {
       setIsLoadingLocation(true);
-      await getLocation();
-      if (coordinates.lat && coordinates.lng) {
-        const region = await getCityByCoordinates(
-          `${coordinates.lat},${coordinates.lng}`,
-        );
-        navigate(`/city/${region}`);
+      const locationResult = await getLocation();
+
+      if (locationResult.coordinates.lat && locationResult.coordinates.lng) {
+        try {
+          const region = await getCityByCoordinates(
+            `${locationResult.coordinates.lat},${locationResult.coordinates.lng}`,
+          );
+          if (region) {
+            navigate(`/city/${region}`);
+          } else {
+            throw new Error("Could not find city for your location");
+          }
+        } catch (apiError) {
+          console.error("API Error:", apiError);
+          alert(
+            "Unable to get weather data for your location. Please try searching for a city instead.",
+          );
+        }
+      } else {
+        throw new Error("No coordinates received");
       }
     } catch (error) {
-      console.error("Error getting location:", error);
-      alert(
-        "Unable to get your location. Please try again or search for a city.",
-      );
+      console.error("Location Error:", error);
+      let errorMessage = "Unable to get your location. ";
+
+      if (error.message.includes("timeout")) {
+        errorMessage += "The request timed out. ";
+      } else if (error.message.includes("denied")) {
+        errorMessage += "Location access was denied. ";
+      } else if (error.message.includes("not supported")) {
+        errorMessage += "Geolocation is not supported. ";
+      }
+
+      errorMessage += "Please try again or search for a city.";
+      alert(errorMessage);
     } finally {
       setIsLoadingLocation(false);
     }
